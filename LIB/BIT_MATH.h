@@ -1,0 +1,19 @@
+/*
+ * BIT_MATH.h
+ *
+ *  Created on: May 2, 2024
+ *      Author: Nour Zaghloul
+ */
+
+#ifndef BIT_MATH_H_
+#define BIT_MATH_H_
+
+#define SET_BIT(VAR,BIT_NUM)	((VAR)|= (1<<(BIT_NUM)))
+#define CLR_BIT(VAR,BIT_NUM)	((VAR)&= ~(1<<(BIT_NUM)))
+#define TOG_BIT(VAR,BIT_NUM)	((VAR)^= (1<<(BIT_NUM)))
+
+//#define GET_BIT(VAR,BIT_NUM)	((VAR) >> (1<<(BIT_NUM))&1)
+#define GET_BIT(VAR,BIT_NUM)	(((VAR)>>(BIT_NUM))&1)
+
+
+#endif /* BIT_MATH_H_ */
