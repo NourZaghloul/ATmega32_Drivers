@@ -13,6 +13,8 @@
 #include "EXTI_prv.h"
 #include "EXTI_cfg.h"
 
+static void(*EXTI_pvCallBack[3])(void) = {0};
+
 void EXTI_voidInit(void)
 {
 #if INT0_SENSE_CTRL == EXTI_LOW_LEVEL
@@ -31,7 +33,8 @@ void EXTI_voidInit(void)
 	SET_BIT(MCUCR, MCUCR_ISC00);
 	SET_BIT(MCUCR, MCUCR_ISC01);
 
-#else	#error Wrong INT0_SENSE_CTRL configuration option
+#else
+#error Wrong INT0_SENSE_CTRL configuration option
 #endif
 
 #if INT1_SENSE_CTRL == EXTI_LOW_LEVEL
@@ -50,7 +53,8 @@ void EXTI_voidInit(void)
 	SET_BIT(MCUCR, MCUCR_ISC10);
 	SET_BIT(MCUCR, MCUCR_ISC11);
 
-#else	#error Wrong INT1_SENSE_CTRL configuration option
+#else
+#error Wrong INT1_SENSE_CTRL configuration option
 #endif
 
 #if INT2_SENSE_CTRL == EXTI_FALLING_EDGE
@@ -59,7 +63,8 @@ void EXTI_voidInit(void)
 #elif INT0_SENSE_CTRL == EXTI_RISING_EDGE
 	SET_BIT(MCUCSR, MCUCSR_ISC2);
 
-#else	#error Wrong INT0_SENSE_CTRL configuration option
+#else
+#error Wrong INT0_SENSE_CTRL configuration option
 #endif
 
 #if	INT0_INIT_STATE == DISABLE
@@ -67,7 +72,8 @@ void EXTI_voidInit(void)
 
 #elif INT0_INIT_STATE == ENABLE
 	SET_BIT(GICR, GICR_INT0);
-#else #error Wrong INT0_INIT_STATE configuration option
+#else
+#error Wrong INT0_INIT_STATE configuration option
 #endif
 
 #if	INT1_INIT_STATE == DISABLE
@@ -75,7 +81,8 @@ void EXTI_voidInit(void)
 
 #elif INT1_INIT_STATE == ENABLE
 	SET_BIT(GICR, GICR_INT1);
-#else #error Wrong INT0_INIT_STATE configuration option
+#else
+#error Wrong INT0_INIT_STATE configuration option
 #endif
 
 #if	INT2_INIT_STATE == DISABLE
@@ -83,7 +90,8 @@ void EXTI_voidInit(void)
 
 #elif INT2_INIT_STATE == ENABLE
 	SET_BIT(GICR, GICR_INT2);
-#else #error Wrong INT0_INIT_STATE configuration option
+#else
+#error Wrong INT0_INIT_STATE configuration option
 #endif
 }
 
@@ -159,3 +167,51 @@ uint8 EXTI_u8DisableIntChannel(IntChannel_t Copy_Intch)
 	return Local_u8errorState;
 }
 
+uint8 EXTI_u8SetCallBack(IntChannel_t Copy_Intch, void(*Copy_pvCallBackFunc)(void))
+{
+	uint8 Local_u8ErrorStatus = OK;
+
+	if(Copy_pvCallBackFunc != NULL)
+	{
+		EXTI_pvCallBack[Copy_Intch] = Copy_pvCallBackFunc;
+	}
+	else
+	{
+		Local_u8ErrorStatus = NOK;
+	}
+
+	return Local_u8ErrorStatus;
+}
+
+/*INT0 ISR*/
+__attribute__((signal))void __vector_1(void);
+void __vector_1 (void)
+{
+	if(EXTI_pvCallBack[INT0] != NULL)
+	{
+		EXTI_pvCallBack[INT0]();
+	}
+
+}
+
+
+/*INT1 ISR*/
+__attribute__((signal))void __vector_2(void);
+void __vector_2 (void)
+{
+	if(EXTI_pvCallBack[INT1] != NULL)
+	{
+		EXTI_pvCallBack[INT1]();
+	}
+}
+
+
+/*INT2 ISR*/
+__attribute__((signal))void __vector_3(void);
+void __vector_3 (void)
+{
+	if(EXTI_pvCallBack[INT2] != NULL)
+	{
+		EXTI_pvCallBack[INT2]();
+	}
+}

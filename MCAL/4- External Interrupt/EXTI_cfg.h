@@ -27,7 +27,7 @@
 
 #define INT1_INIT_STATE					ENABLE
 
-#define INT2_INIT_STATE					ENABLE
+#define INT2_INIT_STATE					DISABLE
 
 
 #endif /* EXTI_CFG_H_ */

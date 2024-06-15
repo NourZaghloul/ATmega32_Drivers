@@ -31,5 +31,7 @@ uint8 EXTI_u8EnableIntChannel(IntChannel_t Copy_Intch);
 
 uint8 EXTI_u8DisableIntChannel(IntChannel_t Copy_Intch);
 
+uint8 EXTI_u8SetCallBack(IntChannel_t Copy_Intch, void(*Copy_pvCallBackFunc)(void));
+
 
 #endif /* EXTI_INTERFACE_H_ */
