@@ -17,5 +17,7 @@
  */
 #define ADC_u8Resolution								TEN_BITS
 
+#define ADC_u32TIMEOUT									50000u
+
 
 #endif

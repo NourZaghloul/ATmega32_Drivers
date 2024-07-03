@@ -17,5 +17,14 @@
 #define EIGHT_BITS				1u
 #define TEN_BITS				2u
 
+#define IDLE					0u
+#define BUSY					1u
+
+#define SINGLE_ASYNCH			0u
+#define CHAIN_ASYNCH			1u
+
+static void voidHandleSingleConvAsynch(void);
+
+static void voidHandleChainConvAsynch(void);
 
 #endif
